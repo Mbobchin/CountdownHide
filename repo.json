@@ -3,7 +3,7 @@
     "Author": "Mbobchin",
     "Name": "CountdownHide",
     "InternalName": "CountdownHide",
-    "AssemblyVersion": "1.5.0.0",
+    "AssemblyVersion": "1.6.0.0",
     "TestingAssemblyVersion": null,
     "Punchline": "Hides the on-screen visual when using the in-game /countdown.",
     "Description": "Suppresses the large on-screen countdown overlay produced by the /countdown command. The countdown still runs and fires normally — only the visual is hidden.\n\nCommands:\n/countdownhide — toggle the feature on/off\n/countdownhide config — open settings",

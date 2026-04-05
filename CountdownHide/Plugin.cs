@@ -14,11 +14,12 @@ public sealed class Plugin : IDalamudPlugin
 {
     private const string CountdownAddonName = "ScreenInfo_CountDown";
     private const string WideTextAddonName  = "_WideText";
-    private const string CommandName        = "/countdownhide";
+    private const string CommandName        = "/cdhide";
 
     [PluginService] internal static IDalamudPluginInterface PluginInterface { get; private set; } = null!;
     [PluginService] internal static ICommandManager CommandManager { get; private set; } = null!;
     [PluginService] internal static IAddonLifecycle AddonLifecycle { get; private set; } = null!;
+    [PluginService] internal static IChatGui ChatGui { get; private set; } = null!;
     [PluginService] internal static IPluginLog Log { get; private set; } = null!;
 
     public Configuration Configuration { get; init; }
@@ -47,7 +48,7 @@ public sealed class Plugin : IDalamudPlugin
 
         CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
         {
-            HelpMessage = "Toggle the countdown overlay on/off, or open settings with 'config'.",
+            HelpMessage = "Toggle countdown visuals on/off. Use 'config' to open settings.",
         });
 
         // Countdown number overlay
@@ -167,11 +168,16 @@ public sealed class Plugin : IDalamudPlugin
                 break;
 
             default:
-                var both = Configuration.HideCountdownOverlay && Configuration.HideBattleCommencingText;
-                Configuration.HideCountdownOverlay = !both;
-                Configuration.HideBattleCommencingText = !both;
+                var both = Configuration.HideCountdownOverlay
+                           && Configuration.HideBattleCommencingText
+                           && Configuration.HideEngageText;
+                Configuration.HideCountdownOverlay      = !both;
+                Configuration.HideBattleCommencingText  = !both;
+                Configuration.HideEngageText            = !both;
                 Configuration.Save();
-                Log.Info($"[CountdownHide] Countdown visuals now {(!both ? "hidden" : "visible")}.");
+
+                var status = !both ? "hidden" : "visible";
+                ChatGui.Print($"[CountdownHide] Countdown visuals are now {status}.");
                 break;
         }
     }
