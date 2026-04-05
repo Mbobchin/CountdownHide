@@ -5,4 +5,11 @@
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
+  <ItemGroup>
+    <!-- ImGui.NET is provided by Dalamud at runtime; reference here is compile-only -->
+    <PackageReference Include="ImGui.NET" Version="1.90.0.1">
+      <Private>false</Private>
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </PackageReference>
+  </ItemGroup>
 </Project>
