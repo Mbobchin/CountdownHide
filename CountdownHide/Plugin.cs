@@ -118,11 +118,11 @@ public sealed class Plugin : IDalamudPlugin
         // Countdown is active — hide candidate addons and log which ones we find.
         foreach (var name in ExtraAddonNames)
         {
-            var ptr = GameGui.GetAddonByName(name);
-            if (ptr == nint.Zero) continue;
+            var atkPtr = GameGui.GetAddonByName(name);
+            if (atkPtr.IsNull) continue;
 
-            var addon = (AtkUnitBase*)ptr;
-            if (!addon->IsVisible) continue;
+            var addon = (AtkUnitBase*)atkPtr.Address;
+            if (addon == null || !addon->IsVisible) continue;
 
             addon->IsVisible = false;
             Log.Info($"[CountdownHide] Hid extra addon during countdown: {name}");
