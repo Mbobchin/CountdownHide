@@ -38,10 +38,10 @@ jobs:
 
       - name: Package
         run: |
-          mkdir -p dist/CountdownHide
-          find CountdownHide/bin/Release -name "CountdownHide.dll" | head -1 | xargs -I{} cp {} dist/CountdownHide/
-          cp CountdownHide/CountdownHide.json dist/CountdownHide/
-          cd dist && zip -r ../latest.zip CountdownHide/
+          mkdir -p dist
+          find CountdownHide/bin/Release -name "CountdownHide.dll" | head -1 | xargs -I{} cp {} dist/
+          cp CountdownHide/CountdownHide.json dist/
+          cd dist && zip -r ../latest.zip .
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
