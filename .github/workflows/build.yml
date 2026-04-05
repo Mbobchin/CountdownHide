@@ -25,6 +25,8 @@ jobs:
         run: |
           wget https://goatcorp.github.io/dalamud-distrib/latest.zip -O /tmp/dalamud.zip
           unzip /tmp/dalamud.zip -d /tmp/dalamud
+          echo "--- Dalamud directory contents ---"
+          ls /tmp/dalamud/
 
       - name: Restore
         run: dotnet restore CountdownHide/CountdownHide.csproj
