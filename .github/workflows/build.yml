@@ -22,14 +22,17 @@ jobs:
       - name: Download Dalamud
         run: |
           wget https://goatcorp.github.io/dalamud-distrib/latest.zip -O /tmp/dalamud.zip
-          mkdir -p ~/.xlcore/dalamud/Hooks/dev/
-          unzip /tmp/dalamud.zip -d ~/.xlcore/dalamud/Hooks/dev/
+          unzip /tmp/dalamud.zip -d /tmp/dalamud
 
       - name: Restore
         run: dotnet restore CountdownHide/CountdownHide.csproj
+        env:
+          DALAMUD_HOME: /tmp/dalamud
 
       - name: Build
         run: dotnet build CountdownHide/CountdownHide.csproj --configuration Release --no-restore
+        env:
+          DALAMUD_HOME: /tmp/dalamud
 
       - name: Package
         run: |
