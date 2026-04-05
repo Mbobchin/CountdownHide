@@ -9,7 +9,7 @@
     "RepoUrl": "https://github.com/Mbobchin/CountdownHide",
     "ApplicableVersion": "any",
     "Tags": ["countdown", "ui", "hud"],
-    "DalamudApiLevel": 12,
+    "DalamudApiLevel": 14,
     "DownloadCount": 0,
     "LastUpdate": 1743724800,
     "DownloadLinkInstall": "https://github.com/Mbobchin/CountdownHide/releases/latest/download/latest.zip",
