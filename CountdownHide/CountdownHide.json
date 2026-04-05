@@ -1,0 +1,12 @@
+{
+  "Author": "You",
+  "Name": "CountdownHide",
+  "Punchline": "Hides the on-screen visual when using the in-game /countdown.",
+  "Description": "Suppresses the large on-screen countdown overlay produced by the /countdown command. The countdown still runs and fires normally — only the visual is hidden. Use /countdownhide to toggle the feature or open settings.",
+  "ApplicableVersion": "any",
+  "Tags": [
+    "countdown",
+    "ui",
+    "hud"
+  ]
+}
