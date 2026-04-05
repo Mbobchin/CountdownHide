@@ -1,5 +1,5 @@
-using Dalamud.Interface.Windowing;
 using Dalamud.Bindings.ImGui;
+using Dalamud.Interface.Windowing;
 using System.Numerics;
 
 namespace CountdownHide.Windows;
@@ -13,7 +13,7 @@ public class ConfigWindow : Window
         _config = config;
         SizeConstraints = new WindowSizeConstraints
         {
-            MinimumSize = new Vector2(360, 180),
+            MinimumSize = new Vector2(380, 210),
             MaximumSize = new Vector2(float.MaxValue, float.MaxValue),
         };
     }
@@ -25,39 +25,37 @@ public class ConfigWindow : Window
         ImGui.Separator();
         ImGui.Spacing();
 
-        // ── Countdown number ───────────────────────────────────────────────
-        var hideOverlay = _config.HideCountdownOverlay;
-        if (ImGui.Checkbox("Hide countdown number overlay", ref hideOverlay))
-        {
-            _config.HideCountdownOverlay = hideOverlay;
-            _config.Save();
-        }
-        if (ImGui.IsItemHovered())
-            ImGui.SetTooltip("Hides the large on-screen number shown by /countdown.");
+        DrawToggle(
+            "Hide countdown number overlay",
+            "Hides the large on-screen number shown by /countdown.",
+            ref _config.HideCountdownOverlay);
 
-        // ── Battle commencing text ─────────────────────────────────────────
-        var hideText = _config.HideBattleCommencingText;
-        if (ImGui.Checkbox("Hide \"Battle commencing\" text", ref hideText))
-        {
-            _config.HideBattleCommencingText = hideText;
-            _config.Save();
-        }
-        if (ImGui.IsItemHovered())
-            ImGui.SetTooltip("Hides the \"Battle commencing in X seconds!\" notification\nthat appears alongside the countdown.");
+        DrawToggle(
+            "Hide \"Battle commencing\" text",
+            "Hides the \"Battle commencing in X seconds!\" notification\nthat appears when a countdown starts.",
+            ref _config.HideBattleCommencingText);
+
+        DrawToggle(
+            "Hide \"Engage!\" text",
+            "Hides the \"Engage!\" notification that appears\nwhen the countdown reaches zero.",
+            ref _config.HideEngageText);
 
         ImGui.Spacing();
         ImGui.Separator();
         ImGui.Spacing();
 
-        // ── Debug ──────────────────────────────────────────────────────────
         ImGui.TextDisabled("Developer");
-        var debug = _config.DebugLogAddons;
-        if (ImGui.Checkbox("Log all addon events to /xllog", ref debug))
-        {
-            _config.DebugLogAddons = debug;
+        DrawToggle(
+            "Log all addon events to /xllog",
+            "Logs every addon PostSetup/PostShow event.\nUseful for identifying unknown addon names.",
+            ref _config.DebugLogAddons);
+    }
+
+    private void DrawToggle(string label, string tooltip, ref bool value)
+    {
+        if (ImGui.Checkbox(label, ref value))
             _config.Save();
-        }
         if (ImGui.IsItemHovered())
-            ImGui.SetTooltip("Logs every addon PostSetup/PostShow event.\nTrigger a /countdown and check /xllog to identify addon names.");
+            ImGui.SetTooltip(tooltip);
     }
 }

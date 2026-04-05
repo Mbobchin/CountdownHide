@@ -23,9 +23,13 @@ public sealed class Plugin : IDalamudPlugin
 
     public Configuration Configuration { get; init; }
 
-    // _WideText address stored when it fires PostShow.
-    // Used to hide "Battle commencing" text the instant ScreenInfo_CountDown confirms a countdown.
-    // Cleared in PreFinalize so "Engage!" (which fires before finalize) is never caught.
+    // True from PostSetup/PostShow of ScreenInfo_CountDown until its PreFinalize.
+    // "Battle commencing" fires while this is FALSE (before countdown appears).
+    // "Engage!" fires while this is TRUE (countdown is still running).
+    private bool _countdownActive;
+
+    // _WideText address stored when it appears before the countdown is confirmed.
+    // Hidden once ScreenInfo_CountDown's event fires 1ms later.
     private nint _pendingWideTextAddr;
 
     private readonly WindowSystem _windowSystem = new("CountdownHide");
@@ -80,35 +84,41 @@ public sealed class Plugin : IDalamudPlugin
 
     private unsafe void OnCountdownSetup(AddonEvent type, AddonArgs args)
     {
+        _countdownActive = true;
         if (Configuration.HideCountdownOverlay) HideAddon(args);
-        // Hide the "Battle commencing" _WideText that fired 1ms before this
         if (Configuration.HideBattleCommencingText) HidePendingWideText();
     }
 
     private unsafe void OnCountdownShow(AddonEvent type, AddonArgs args)
     {
+        _countdownActive = true;
         if (Configuration.HideCountdownOverlay) HideAddon(args);
         if (Configuration.HideBattleCommencingText) HidePendingWideText();
     }
 
     private void OnCountdownFinalize(AddonEvent type, AddonArgs args)
     {
-        // Clear pending BEFORE "Engage!" fires its PostShow so we never hide it.
-        // Sequence: PreFinalize → (addon destroyed) → _WideText "Engage!" PostShow
-        // Actually "Engage!" fires before PreFinalize, but clearing here ensures
-        // the stored address is never used to hide the end-of-countdown text.
+        _countdownActive = false;
         _pendingWideTextAddr = nint.Zero;
     }
 
     // ── _WideText ("Battle commencing" text) ─────────────────────────────────
 
-    private void OnWideTextShow(AddonEvent type, AddonArgs args)
+    private unsafe void OnWideTextShow(AddonEvent type, AddonArgs args)
     {
-        // Store the address. We hide it once ScreenInfo_CountDown confirms a
-        // countdown is starting. If no countdown follows, the pending is
-        // cleared by PreFinalize (or overwritten on the next show) — never used.
-        if (Configuration.HideBattleCommencingText)
-            _pendingWideTextAddr = args.Addon.Address;
+        if (_countdownActive)
+        {
+            // Countdown is running — this is the "Engage!" text (fires before PreFinalize).
+            if (Configuration.HideEngageText)
+                HideAddon(args);
+        }
+        else
+        {
+            // No countdown running yet — this may be "Battle commencing".
+            // Store the address; hide it once ScreenInfo_CountDown confirms it.
+            if (Configuration.HideBattleCommencingText)
+                _pendingWideTextAddr = args.Addon.Address;
+        }
     }
 
     private unsafe void HidePendingWideText()
