@@ -1,0 +1,23 @@
+[
+  {
+    "Author": "Mbobchin",
+    "Name": "CountdownHide",
+    "InternalName": "CountdownHide",
+    "AssemblyVersion": "1.0.0.0",
+    "Punchline": "Hides the on-screen visual when using the in-game /countdown.",
+    "Description": "Suppresses the large on-screen countdown overlay produced by the /countdown command. The countdown still runs and fires normally — only the visual is hidden.\n\nCommands:\n/countdownhide — toggle the feature on/off\n/countdownhide config — open settings",
+    "RepoUrl": "https://github.com/Mbobchin/CountdownHide",
+    "ApplicableVersion": "any",
+    "Tags": ["countdown", "ui", "hud"],
+    "DalamudApiLevel": 12,
+    "DownloadCount": 0,
+    "LastUpdate": 1743724800,
+    "DownloadLinkInstall": "https://github.com/Mbobchin/CountdownHide/releases/latest/download/latest.zip",
+    "DownloadLinkTesting": "https://github.com/Mbobchin/CountdownHide/releases/latest/download/latest.zip",
+    "DownloadLinkUpdate": "https://github.com/Mbobchin/CountdownHide/releases/latest/download/latest.zip",
+    "IsHide": false,
+    "IsTestingExclusive": false,
+    "ImageUrls": [],
+    "IconUrl": ""
+  }
+]
