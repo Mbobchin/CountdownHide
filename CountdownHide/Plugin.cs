@@ -19,12 +19,11 @@ public sealed class Plugin : IDalamudPlugin
     // The winning name will appear in /xllog when debug logging is enabled.
     private static readonly string[] BattleTextCandidates =
     [
+        "_WideText",        // "Battle commencing in X seconds!" — identified via /xllog
         "_Notification",
         "_ScreenText",
         "SystemText",
         "_BattleTalk",
-        "ScreenInfo",
-        "_FlyText",
     ];
 
     [PluginService] internal static IDalamudPluginInterface PluginInterface { get; private set; } = null!;
