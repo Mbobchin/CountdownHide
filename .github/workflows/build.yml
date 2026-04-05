@@ -25,8 +25,6 @@ jobs:
         run: |
           wget https://goatcorp.github.io/dalamud-distrib/latest.zip -O /tmp/dalamud.zip
           unzip /tmp/dalamud.zip -d /tmp/dalamud
-          echo "--- Dalamud directory contents ---"
-          ls /tmp/dalamud/
 
       - name: Restore
         run: dotnet restore CountdownHide/CountdownHide.csproj
@@ -40,9 +38,12 @@ jobs:
 
       - name: Package
         run: |
+          VERSION=$(grep '<Version>' CountdownHide/CountdownHide.csproj | sed 's/.*<Version>\(.*\)<\/Version>.*/\1/' | tr -d '[:space:]')
+          echo "Packaging version $VERSION"
           mkdir -p dist
           find CountdownHide/bin/Release -name "CountdownHide.dll" | head -1 | xargs -I{} cp {} dist/
-          cp CountdownHide/CountdownHide.json dist/
+          # Inject the version into the plugin manifest so Dalamud reads the correct version
+          jq --arg v "$VERSION" '.AssemblyVersion = $v' CountdownHide/CountdownHide.json > dist/CountdownHide.json
           cd dist && zip -r ../latest.zip .
 
       - name: Upload artifact
