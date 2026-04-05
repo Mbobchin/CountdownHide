@@ -4,12 +4,16 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
+    <!-- Resolve to the DALAMUD_HOME env var on CI, or the local XIVLauncher install otherwise -->
+    <DalamudLibPath Condition="'$(DALAMUD_HOME)' != ''">$(DALAMUD_HOME)/</DalamudLibPath>
+    <DalamudLibPath Condition="'$(DALAMUD_HOME)' == ''">$(LocalAppData)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
   </PropertyGroup>
   <ItemGroup>
-    <!-- ImGui.NET is provided by Dalamud at runtime; reference here is compile-only -->
-    <PackageReference Include="ImGui.NET" Version="1.90.0.1">
-      <Private>false</Private>
-      <ExcludeAssets>runtime</ExcludeAssets>
-    </PackageReference>
+    <!-- Reference ImGui.NET from the Dalamud directory so the compiled assembly
+         targets exactly the version Dalamud ships — no runtime version mismatch. -->
+    <Reference Include="ImGui.NET">
+      <HintPath>$(DalamudLibPath)ImGui.NET.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
 </Project>
